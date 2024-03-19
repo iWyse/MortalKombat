@@ -12,6 +12,7 @@ const player1 = {
 	title: "player1",
 	name: "scorpion",
 	hp: 100,
+
 	img: "./assets/scorpion.png",
 	weapon: ["axe"],
 	attack,
