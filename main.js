@@ -1,5 +1,5 @@
-const arenas = document.querySelector(".arenas");
-const randomButton = document.querySelector(".button");
+const arenas = document.querySelector('.arenas');
+const randomButton = document.querySelector('.button');
 
 const attack = function attack() {
 	const result = `${this.name} Fight`;
@@ -8,23 +8,22 @@ const attack = function attack() {
 };
 
 const player1 = {
-	player: 1,
-	title: "player1",
-	name: "scorpion",
+	playerID: 1,
+	title: 'player1',
+	name: 'scorpion',
 	hp: 100,
-
-	img: "./assets/scorpion.png",
-	weapon: ["axe"],
+	img: './assets/scorpion.gif',
+	weapon: ['axe'],
 	attack,
 };
 
 const player2 = {
-	player: 2,
-	title: "player2",
-	name: "subzero",
+	playerID: 2,
+	title: 'player2',
+	name: 'kitana',
 	hp: 100,
-	img: "./assets/subzero.png",
-	weapon: ["stick"],
+	img: './assets/kitana.gif',
+	weapon: ['stick'],
 	attack,
 };
 
@@ -40,50 +39,52 @@ function createElement(tag, className) {
 	return $tag;
 }
 function createPlayer(player) {
-	const $player = createElement("div", player.title);
-	const progressbar = createElement("div", "progressbar");
-	const life = createElement("div", "life");
-	const name = createElement("div", "name");
-	const character = createElement("div", "character");
-	const image = createElement("img");
-	const hpPlayer = createElement("div", "hpPlayer");
+	const playerEl = createElement('div', player.title);
+	const progressbar = createElement('div', 'progressbar');
+	const life = createElement('div', 'life');
+	const name = createElement('div', 'name');
+	const character = createElement('div', 'character');
+	const image = createElement('img');
+	const hpPlayer = createElement('div', 'hpPlayer');
 	name.innerText = player.name;
 	life.style.width = `${player.hp}%`;
-	hpPlayer.innerText = life.style.width;
+	hpPlayer.innerText = `${player.hp}%`;
 	image.src = player.img;
 	character.append(image);
 	progressbar.append(hpPlayer, name, life);
-	$player.append(progressbar, character);
-	arenas.append($player);
-	return $player;
+	playerEl.append(progressbar, character);
+	return playerEl;
 }
 arenas.append(createPlayer(player1));
 arenas.append(createPlayer(player2));
 
 function changeHP(player) {
-	const playerLife = document.querySelector(`.player${player.player} .life`);
-	const statusHP = document.querySelector(`.player${player.player} .hpPlayer`);
+	const playerLife = document.querySelector(`.player${player.playerID} .life`);
+	const statusHP = document.querySelector(
+		`.player${player.playerID} .hpPlayer`
+	);
 	player.hp -= randomInteger(1, 20);
-	playerLife.style.width = player.hp + "%";
-	statusHP.innerText = playerLife.style.width;
+	statusHP.innerText = player.hp + '%';
+	playerLife.style.width = player.hp + '%';
 	if (player.hp <= 0) {
-		statusHP.innerText = "dead";
+		statusHP.innerText = 'dead';
 		player.hp = 0;
+		playerLife.style.width = 0;
 	}
 }
 
 function showResult(name) {
-	const gameResult = createElement("div", "gameResult");
+	const gameResult = createElement('div', 'gameResult');
 	if (name) {
-		gameResult.innerText = name + " wins";
+		gameResult.innerText = name + ' wins';
 	} else {
-		gameResult.innerText = "Draw";
+		gameResult.innerText = 'Draw';
 	}
 
 	return gameResult;
 }
 
-randomButton.addEventListener("click", function () {
+randomButton.addEventListener('click', function () {
 	changeHP(player1);
 	changeHP(player2);
 
@@ -100,6 +101,7 @@ randomButton.addEventListener("click", function () {
 	}
 });
 
+//* Ф-ия рандома
 function randomInteger(min, max) {
 	let rand = min + Math.random() * (max + 1 - min);
 	return Math.floor(rand);

@@ -1,11 +1,11 @@
 @font-face {
-	font-family: "Mortal Kombat 3";
-	src: url("./assets/fonts/MortalKombat3-Regular.eot");
-	src: url("./assets/fonts/MortalKombat3-Regular.eot?#iefix")
-			format("embedded-opentype"),
-		url("./assets/fonts/MortalKombat3-Regular.woff2") format("woff2"),
-		url("./assets/fonts/MortalKombat3-Regular.woff") format("woff"),
-		url("./assets/fonts/MortalKombat3-Regular.ttf") format("truetype");
+	font-family: 'Mortal Kombat 3';
+	src: url('./assets/fonts/MortalKombat3-Regular.eot');
+	src: url('./assets/fonts/MortalKombat3-Regular.eot?#iefix')
+			format('embedded-opentype'),
+		url('./assets/fonts/MortalKombat3-Regular.woff2') format('woff2'),
+		url('./assets/fonts/MortalKombat3-Regular.woff') format('woff'),
+		url('./assets/fonts/MortalKombat3-Regular.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
@@ -150,7 +150,7 @@ body {
 
 .name {
 	position: absolute;
-	font-family: "Mortal Kombat 3";
+	font-family: 'Mortal Kombat 3';
 	font-size: 26px;
 	line-height: 20px;
 	letter-spacing: 2px;
@@ -188,7 +188,7 @@ body {
 }
 
 .player2 .character {
-	right: 180px;
+	right: 60px;
 }
 
 .player2 .character img {
@@ -238,11 +238,11 @@ body {
 	border-radius: 4px;
 	box-sizing: border-box;
 	cursor: pointer;
-	font-family: "Mortal Kombat 3";
+	font-family: 'Mortal Kombat 3';
 	outline: none;
 }
 .button::after {
-	content: "";
+	content: '';
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -271,7 +271,7 @@ body {
 	text-transform: uppercase;
 	z-index: 1000;
 	color: white;
-	font-family: "Mortal Kombat 3";
+	font-family: 'Mortal Kombat 3';
 }
 
 .hpPlayer {
