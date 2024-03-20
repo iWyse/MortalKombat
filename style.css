@@ -288,3 +288,15 @@ body {
 .player2 .hpPlayer {
 	left: 0;
 }
+
+.reloadWrap {
+	position: absolute;
+	top: 10%;
+	z-index: 1000;
+	left: 50%;
+	transform: translate(-50%, 0%);
+}
+
+.reloadWrap .button {
+	margin-top: 0;
+}
