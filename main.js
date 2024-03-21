@@ -1,118 +1,132 @@
-//* Task #0
+const arenas = document.querySelector('.arenas');
+const randomButton = document.querySelector('.button');
 
 const attack = function attack() {
-	const result = `${this.name} Fight`;
-	console.log(result);
-	return result;
+	console.log(`${this.name} Fight...`);
 };
 
 const player1 = {
-	title: "player1",
-	name: "scorpion",
-	hp: 65,
-	img: "./assets/scorpion.png",
-	weapon: ["axe"],
+	playerID: 1,
+	title: 'player1',
+	name: 'scorpion',
+	hp: 100,
+	img: './assets/scorpion.gif',
+	weapon: ['axe'],
+	changeHP,
+	elHP,
+	renderHP,
 	attack,
 };
 
 const player2 = {
-	title: "player2",
-	name: "subzero",
-	hp: 90,
-	img: "./assets/subzero.png",
-	weapon: ["stick"],
+	playerID: 2,
+	title: 'player2',
+	name: 'kitana',
+	hp: 100,
+	img: './assets/kitana.gif',
+	weapon: ['stick'],
+	changeHP,
+	elHP,
+	renderHP,
 	attack,
 };
 
-player1.attack();
-player2.attack();
+function createElement(tag, className) {
+	const $tag = document.createElement(tag);
+	if (className) {
+		$tag.classList.add(className);
+	}
 
-//* Task #1
-// const root = document.querySelector(".root");
-
-// function createPlayer() {
-// 	const player = document.createElement("div");
-// 	player.classList.add("player1");
-
-// 	const progressbar = document.createElement("div");
-// 	progressbar.classList.add("progressbar");
-
-// 	const life = document.createElement("div");
-// 	life.style.width = "100%";
-// 	const name = document.createElement("div");
-// 	life.classList.add("life");
-// 	name.classList.add("name");
-// 	name.innerText = "Scorpion";
-
-// 	const character = document.createElement("div");
-// 	character.classList.add("character");
-
-// 	const img = document.createElement("img");
-// 	img.src = "./assets/scorpion.png";
-// 	character.append(img);
-// 	progressbar.append(name, life);
-// 	player.append(progressbar, character);
-// 	root.append(player);
-// }
-// createPlayer();
-
-//* Task #2
-// const arenas = document.querySelector(".arenas");
-
-// function createPlayer(player, playerName, playerHP, playerImage) {
-// 	const $player = document.createElement("div");
-// 	$player.classList.add(player);
-
-// 	const progressbar = document.createElement("div");
-// 	progressbar.classList.add("progressbar");
-
-// 	const life = document.createElement("div");
-// 	life.style.width = `${playerHP} + %`;
-// 	const name = document.createElement("div");
-// 	life.classList.add("life");
-// 	name.classList.add("name");
-// 	name.innerText = playerName;
-
-// 	const character = document.createElement("div");
-// 	character.classList.add("character");
-
-// 	const img = document.createElement("img");
-// 	img.src = playerImage;
-// 	character.append(img);
-// 	progressbar.append(name, life);
-// 	$player.append(progressbar, character);
-// 	arenas.append($player);
-// }
-// createPlayer("player1", player1.name, player1.hp, player1.img);
-// createPlayer("player2", player2.name, player2.hp, player2.img);
-
-//* Task #3
-const arenas = document.querySelector(".arenas");
+	return $tag;
+}
 
 function createPlayer(player) {
-	let { title, name: playerName, hp, img } = player;
-	const $player = document.createElement("div");
-	$player.classList.add(title);
-
-	const progressbar = document.createElement("div");
-	progressbar.classList.add("progressbar");
-
-	const life = document.createElement("div");
-	life.style.width = `${hp}%`;
-	const name = document.createElement("div");
-	life.classList.add("life");
-	name.classList.add("name");
-	name.innerText = playerName;
-
-	const character = document.createElement("div");
-	character.classList.add("character");
-
-	const image = document.createElement("img");
-	image.src = img;
+	const playerEl = createElement('div', player.title);
+	const progressbar = createElement('div', 'progressbar');
+	const life = createElement('div', 'life');
+	const name = createElement('div', 'name');
+	const character = createElement('div', 'character');
+	const image = createElement('img');
+	const hpPlayer = createElement('div', 'hpPlayer');
+	name.innerText = player.name;
+	life.style.width = `${player.hp}%`;
+	hpPlayer.innerText = `${player.hp}%`;
+	image.src = player.img;
 	character.append(image);
-	progressbar.append(name, life);
-	$player.append(progressbar, character);
-	arenas.append($player);
+	progressbar.append(hpPlayer, name, life);
+	playerEl.append(progressbar, character);
+	return playerEl;
 }
-createPlayer(player1);
-createPlayer(player2);
+
+function showResult(name) {
+	const gameResult = createElement('div', 'gameResult');
+	if (name) {
+		gameResult.innerText = name + ' wins';
+	} else {
+		gameResult.innerText = 'Draw';
+	}
+
+	return gameResult;
+}
+
+function getRandom(min, max) {
+	let rand = min + Math.random() * (max + 1 - min);
+	return Math.floor(rand);
+}
+
+function changeHP(damage) {
+	this.hp -= damage;
+}
+
+function elHP() {
+	return document.querySelector(`.player${this.playerID} .life`);
+}
+
+function renderHP() {
+	const statusHP = document.querySelector(`.player${this.playerID} .hpPlayer`);
+	this.elHP().style.width = this.hp + '%';
+	statusHP.innerText = this.hp + '%';
+	if (this.hp <= 0) {
+		statusHP.innerText = 'dead';
+		this.elHP().style.width = 0;
+		this.hp = 0;
+	}
+}
+
+function createReloadButton() {
+	const reloadWrap = createElement('div', 'reloadWrap');
+	const buttonRestart = createElement('button', 'button');
+	buttonRestart.innerText = 'Restart';
+	buttonRestart.addEventListener('click', function (event) {
+		window.location.reload();
+	});
+	reloadWrap.append(buttonRestart);
+	arenas.append(reloadWrap);
+}
+
+randomButton.addEventListener('click', function () {
+	player1.changeHP(getRandom(1, 20));
+	player2.changeHP(getRandom(1, 20));
+	player1.renderHP();
+	player2.renderHP();
+
+	if (player1.hp === 0 || player2.hp === 0) {
+		randomButton.disabled = true;
+
+		setTimeout(() => {
+			createReloadButton();
+		}, 1000);
+		randomButton.style.display = 'none';
+	}
+
+	if (player1.hp === 0 && player1.hp < player2.hp) {
+		arenas.append(showResult(player2.name));
+	} else if (player2.hp === 0 && player1.hp > player2.hp) {
+		arenas.append(showResult(player1.name));
+	} else if (player1.hp === 0 && player2.hp === 0) {
+		arenas.append(showResult());
+	}
+});
+
+arenas.append(createPlayer(player1));
+arenas.append(createPlayer(player2));
