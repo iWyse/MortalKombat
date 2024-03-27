@@ -1,118 +1,245 @@
-//* Task #0
+const arenas = document.querySelector('.arenas');
+const randomButton = document.querySelector('.button');
+const formFight = document.querySelector('.control');
+
+const HIT = {
+	head: 30,
+	body: 25,
+	foot: 20,
+};
+
+const ATTACK = ['head', 'body', 'foot'];
 
 const attack = function attack() {
-	const result = `${this.name} Fight`;
-	console.log(result);
-	return result;
+	console.log(`${this.name} Fight...`);
 };
 
 const player1 = {
-	title: "player1",
-	name: "scorpion",
-	hp: 65,
-	img: "./assets/scorpion.png",
-	weapon: ["axe"],
+	playerID: 1,
+	title: 'player1',
+	name: 'scorpion',
+	hp: 100,
+	img: './assets/scorpion.gif',
+	weapon: ['axe'],
+	changeHP,
+	elHP,
+	renderHP,
 	attack,
 };
 
 const player2 = {
-	title: "player2",
-	name: "subzero",
-	hp: 90,
-	img: "./assets/subzero.png",
-	weapon: ["stick"],
+	playerID: 2,
+	title: 'player2',
+	name: 'kitana',
+	hp: 100,
+	img: './assets/kitana.gif',
+	weapon: ['stick'],
+	changeHP,
+	elHP,
+	renderHP,
 	attack,
 };
 
-player1.attack();
-player2.attack();
+/**
+ * Функция создает элемент HTML
+ * @param {string} tag
+ * @param {string} className
+ * @returns {HTMLElement}
+ */
+function createElement(tag, className) {
+	const $tag = document.createElement(tag);
+	if (className) {
+		$tag.classList.add(className);
+	}
 
-//* Task #1
-// const root = document.querySelector(".root");
-
-// function createPlayer() {
-// 	const player = document.createElement("div");
-// 	player.classList.add("player1");
-
-// 	const progressbar = document.createElement("div");
-// 	progressbar.classList.add("progressbar");
-
-// 	const life = document.createElement("div");
-// 	life.style.width = "100%";
-// 	const name = document.createElement("div");
-// 	life.classList.add("life");
-// 	name.classList.add("name");
-// 	name.innerText = "Scorpion";
-
-// 	const character = document.createElement("div");
-// 	character.classList.add("character");
-
-// 	const img = document.createElement("img");
-// 	img.src = "./assets/scorpion.png";
-// 	character.append(img);
-// 	progressbar.append(name, life);
-// 	player.append(progressbar, character);
-// 	root.append(player);
-// }
-// createPlayer();
-
-//* Task #2
-// const arenas = document.querySelector(".arenas");
-
-// function createPlayer(player, playerName, playerHP, playerImage) {
-// 	const $player = document.createElement("div");
-// 	$player.classList.add(player);
-
-// 	const progressbar = document.createElement("div");
-// 	progressbar.classList.add("progressbar");
-
-// 	const life = document.createElement("div");
-// 	life.style.width = `${playerHP} + %`;
-// 	const name = document.createElement("div");
-// 	life.classList.add("life");
-// 	name.classList.add("name");
-// 	name.innerText = playerName;
-
-// 	const character = document.createElement("div");
-// 	character.classList.add("character");
-
-// 	const img = document.createElement("img");
-// 	img.src = playerImage;
-// 	character.append(img);
-// 	progressbar.append(name, life);
-// 	$player.append(progressbar, character);
-// 	arenas.append($player);
-// }
-// createPlayer("player1", player1.name, player1.hp, player1.img);
-// createPlayer("player2", player2.name, player2.hp, player2.img);
-
-//* Task #3
-const arenas = document.querySelector(".arenas");
-
-function createPlayer(player) {
-	let { title, name: playerName, hp, img } = player;
-	const $player = document.createElement("div");
-	$player.classList.add(title);
-
-	const progressbar = document.createElement("div");
-	progressbar.classList.add("progressbar");
-
-	const life = document.createElement("div");
-	life.style.width = `${hp}%`;
-	const name = document.createElement("div");
-	life.classList.add("life");
-	name.classList.add("name");
-	name.innerText = playerName;
-
-	const character = document.createElement("div");
-	character.classList.add("character");
-
-	const image = document.createElement("img");
-	image.src = img;
-	character.append(image);
-	progressbar.append(name, life);
-	$player.append(progressbar, character);
-	arenas.append($player);
+	return $tag;
 }
-createPlayer(player1);
-createPlayer(player2);
+/**
+ * Функция создает игрока
+ * @param playerObject
+ * @returns {HTMLElement}
+ */
+function createPlayer(player) {
+	const playerEl = createElement('div', player.title);
+	const progressbar = createElement('div', 'progressbar');
+	const life = createElement('div', 'life');
+	const name = createElement('div', 'name');
+	const character = createElement('div', 'character');
+	const image = createElement('img');
+	const hpPlayer = createElement('div', 'hpPlayer');
+	name.innerText = player.name;
+	life.style.width = `${player.hp}%`;
+	hpPlayer.innerText = `${player.hp}%`;
+	image.src = player.img;
+	character.append(image);
+	progressbar.append(hpPlayer, name, life);
+	playerEl.append(progressbar, character);
+	return playerEl;
+}
+/**
+ * Функция выводит результат игры, победа или ничья
+ * @param {string} name
+ * @returns {HTMLElement}
+ */
+function showResult(name) {
+	const gameResult = createElement('div', 'gameResult');
+	if (name) {
+		gameResult.innerText = name + ' wins';
+	} else {
+		gameResult.innerText = 'Draw';
+	}
+
+	return gameResult;
+}
+/**
+ * Функция генерации случайных чисел в диапазоне min / max
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
+function getRandom(number) {
+	return number ? Math.ceil(Math.random() * number) : 20;
+}
+/**
+ * Функция уменьшает HP у игрока на величину damage
+ * @param {number} damage
+ * @returns {number}
+ */
+function changeHP(damage) {
+	this.hp -= damage;
+}
+/**
+ * Функция возвращает элемент здоровья персонажа
+ * @returns {HTMLElement}
+ */
+function elHP() {
+	return document.querySelector(`.player${this.playerID} .life`);
+}
+
+/**
+ * Функция отрисовывает кол-во жизней в %
+ * @returns {HTMLElement}
+ */
+function renderHP() {
+	const statusHP = document.querySelector(`.player${this.playerID} .hpPlayer`);
+	this.elHP().style.width = this.hp + '%';
+	statusHP.innerText = this.hp + '%';
+	if (this.hp <= 0) {
+		statusHP.innerText = 'dead';
+		this.elHP().style.width = 0;
+		this.hp = 0;
+	}
+}
+
+/**
+ * Функция создает кнопку перезагрузки игры
+ * @returns {HTMLElement}
+ */
+function createReloadButton() {
+	const reloadWrap = createElement('div', 'reloadWrap');
+	const buttonRestart = createElement('button', 'button');
+	buttonRestart.innerText = 'Restart';
+	buttonRestart.addEventListener('click', function (event) {
+		window.location.reload();
+	});
+	reloadWrap.append(buttonRestart);
+	arenas.append(reloadWrap);
+
+	return reloadWrap;
+}
+/**
+ * Функция - удар противника
+ * @returns {{hit: (string), defence: (string), value: number}}
+ */
+function enemyAttack() {
+	const hit = ATTACK[getRandom(ATTACK.length) - 1];
+	const defence = ATTACK[getRandom(ATTACK.length) - 1];
+	console.log(ATTACK.length);
+	return {
+		value: getRandom(HIT[hit]),
+		hit,
+		defence,
+	};
+}
+
+/**
+ * Функция - удар игрока
+ * @param {Element} formFight
+ * @returns {{hit: (string), defence: (string), value: number}}
+ */
+function playerAttack() {
+	const attack = {
+		value: 0,
+		hit: '',
+		defence: '',
+	};
+	for (let item of formFight) {
+		if (item.checked && item.name === 'hit') {
+			attack.value = getRandom(HIT[item.value]);
+			attack.hit = item.value;
+		}
+
+		if (item.checked && item.name === 'defence') {
+			attack.defence = item.value;
+		}
+		//Обнуление контролов
+		item.checked = false;
+	}
+
+	return attack;
+}
+
+/**
+ * Функция - бой
+ * @param player1
+ * @param player2
+ */
+function fight(player1, player2) {
+	const enemy = enemyAttack();
+	const player = playerAttack();
+
+	if (enemy.hit !== player.defence) {
+		player1.changeHP(enemy.value);
+		player1.renderHP();
+	}
+
+	if (player.hit !== enemy.defence) {
+		player2.changeHP(player.value);
+		player2.renderHP();
+	}
+}
+
+/**
+ * Функция - Рельзультат боя
+ * @param player1
+ * @param player2
+ */
+function checkResult(player1, player2) {
+	if (player1.hp === 0 || player2.hp === 0) {
+		randomButton.disabled = true;
+
+		setTimeout(() => {
+			createReloadButton();
+		}, 1000);
+		randomButton.style.display = 'none';
+	}
+
+	if (player1.hp === 0 && player1.hp < player2.hp) {
+		arenas.append(showResult(player2.name));
+	} else if (player2.hp === 0 && player1.hp > player2.hp) {
+		arenas.append(showResult(player1.name));
+	} else if (player1.hp === 0 && player2.hp === 0) {
+		arenas.append(showResult());
+	}
+}
+
+formFight.addEventListener('submit', function (event) {
+	event.preventDefault();
+
+	fight(player1, player2);
+
+	checkResult(player1, player2);
+});
+
+arenas.append(createPlayer(player1));
+arenas.append(createPlayer(player2));
